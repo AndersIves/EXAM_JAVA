@@ -53,15 +53,21 @@ public class MyJDBC {
         ResultSet resultSet1 = preparedStatement1.executeQuery();
         resultSet1.next();
         System.out.println(resultSet1.getString(1)+" 租用的Film");
-        sql = "SELECT city,city_id FROM city WHERE country_id = "+Customer_ID;
+        sql = "SELECT film.film_id,film.title,rental.rental_date "+
+                "FROM customer,rental,inventory, film "+
+                "WHERE customer.customer_id = rental.customer_id "+
+                "AND rental.inventory_id = inventory.inventory_id "+
+                "AND inventory.film_id = film.film_id "+
+                "AND customer.customer_id = "+Customer_ID+
+                " ORDER BY rental.return_date DESC ";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         ResultSet resultSet = preparedStatement.executeQuery();
         System.out.println("Film ID | Film 名称 | 租用时间");
         while (resultSet.next()){
             String out1 = resultSet.getString(1);
             String out2 = resultSet.getString(2);
-            //String out3 = resultSet.getString(3);
-            System.out.println(out1+"|"+out2+"|");
+            String out3 = resultSet.getString(3);
+            System.out.println(out1+"|"+out2+"|"+out3);
         }
         resultSet.close();
         preparedStatement.close();
