@@ -16,27 +16,55 @@ public class MyJDBC {
             String password = XMLdispart.getInf().get("password");
             Connection connection = DriverManager.getConnection("jdbc:mysql://"+ip+":"+port+"/"+db_name+"?serverTimezone=UTC",user_name,password);
 
-            String Country_ID = XMLdispart.getInf().get("Country_ID");
-            System.out.println("Country_ID: "+Country_ID);
+            fun1(connection);
+            fun2(connection);
 
-
-            String sql = "SELECT city,city_id FROM city WHERE country_id = "+Country_ID;
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            System.out.println("城市 ID | 城市名称");
-            while (resultSet.next()){
-                String out1 = resultSet.getString(1);
-                String out2 = resultSet.getString(2);
-                System.out.println(out1+"|"+out2);
-            }
-            String Customer_ID = XMLdispart.getInf().get("Customer_ID");
-            System.out.println("Customer_ID: "+Customer_ID);
-
-            resultSet.close();
-            preparedStatement.close();
             connection.close();
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+    void fun1(Connection connection) throws Exception{
+        String Country_ID = XMLdispart.getInf().get("Country_ID");
+        System.out.println("Country_ID: "+Country_ID);
+        String sql = "SELECT country FROM country WHERE country_id = "+Country_ID;
+        PreparedStatement preparedStatement1 = connection.prepareStatement(sql);
+        ResultSet resultSet1 = preparedStatement1.executeQuery();
+        resultSet1.next();
+        System.out.println("Country "+resultSet1.getString(1)+" 的城市");
+        sql = "SELECT city,city_id FROM city WHERE country_id = "+Country_ID;
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        System.out.println("城市 ID | 城市名称");
+        while (resultSet.next()){
+            String out1 = resultSet.getString(1);
+            String out2 = resultSet.getString(2);
+            System.out.println(out1+"|"+out2);
+        }
+        resultSet.close();
+        preparedStatement.close();
+        System.out.println();
+    }
+    void fun2(Connection connection) throws Exception{
+        String Customer_ID = XMLdispart.getInf().get("Customer_ID");
+        System.out.println("Customer_ID: "+Customer_ID);
+        String sql = "SELECT concat(first_name,\" \",last_name) FROM customer WHERE customer_id ="+Customer_ID;
+        PreparedStatement preparedStatement1 = connection.prepareStatement(sql);
+        ResultSet resultSet1 = preparedStatement1.executeQuery();
+        resultSet1.next();
+        System.out.println(resultSet1.getString(1)+" 租用的Film");
+        sql = "SELECT city,city_id FROM city WHERE country_id = "+Customer_ID;
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        System.out.println("Film ID | Film 名称 | 租用时间");
+        while (resultSet.next()){
+            String out1 = resultSet.getString(1);
+            String out2 = resultSet.getString(2);
+            //String out3 = resultSet.getString(3);
+            System.out.println(out1+"|"+out2+"|");
+        }
+        resultSet.close();
+        preparedStatement.close();
+        System.out.println();
     }
 }
