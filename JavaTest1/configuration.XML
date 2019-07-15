@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <ip>localhost</ip>
+    <port>6666</port>
+    <db_name>sakila</db_name>
+    <user_name>root</user_name>
+    <password>qazsedcft</password>
+    <Country_ID>1</Country_ID>
+    <Customer_ID>1</Customer_ID>
+</configuration>
